@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parke Azadi — Improving Retention Through a Time-Based Collection Event</title>
+<meta name="description" content="Product design case study — a Yalda collection event that lifted D7 retention by 7.15pp in a social multiplayer game.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #16130F;
+    --body: #3C3730;
+    --muted: #7A736A;
+    --faint: #A39C92;
+    --line: #E5E1DA;
+    --accent: #A93B32;
+    --paper: #FBF9F5;
+    --wash: #F4F0E9;
+    --crimson: #8E2141;
+    --crimson-deep: #75182F;
+    --leaf: #16402F;
+    --leaf-deep: #0E2E21;
+    --sun: #F5B62E;
+    --grotesk: "Space Grotesk", "Helvetica Neue", sans-serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+
+  /* ---------- top nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex; align-items: center; gap: 24px;
+    height: 56px;
+  }
+  .nav .brand {
+    font-family: var(--grotesk);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav .brand .dot { color: var(--accent); }
+  .nav-links {
+    display: flex; gap: 4px; margin-left: auto;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    font-family: var(--grotesk);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    padding: 6px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+    transition: color 0.2s, background 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); background: var(--wash); }
+  .progress {
+    position: absolute; left: 0; bottom: -1px; height: 2px;
+    background: var(--accent); width: 0;
+  }
+
+  /* ---------- hero ---------- */
+  .hero { padding: clamp(56px, 9vw, 110px) 0 clamp(40px, 6vw, 72px); }
+  .eyebrow {
+    font-family: var(--grotesk);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .eyebrow .dot { color: var(--accent); }
+  .hero h1 {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 5.6vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    max-width: 20ch;
+    margin: 20px 0 24px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .intro {
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    max-width: 56ch;
+    margin-bottom: 40px;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: start;
+    column-gap: clamp(28px, 5vw, 64px);
+    row-gap: 20px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 20px 0;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .meta-grid .k {
+    font-family: var(--grotesk);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 6px;
+  }
+  .meta-grid .v { font-family: var(--grotesk); font-weight: 500; color: var(--ink); font-size: 1rem; }
+  .meta-grid .v.accent { color: var(--accent); }
+
+  /* ---------- figures ---------- */
+  figure.fig { margin: 0; }
+  figure.fig img {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+  }
+  figure.fig figcaption {
+    font-size: 0.85rem;
+    color: var(--faint);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  figure.fig figcaption b {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 8px;
+  }
+  .fig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 28px); }
+
+  /* ---------- sections ---------- */
+  section { padding: clamp(48px, 8vw, 96px) 0 0; }
+  section:last-of-type { padding-bottom: clamp(48px, 8vw, 96px); }
+  .section-head {
+    display: flex; align-items: baseline; gap: 18px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 16px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+  .section-head .num {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+  .section-head h2 {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .section-head .tag {
+    margin-left: auto;
+    font-family: var(--grotesk);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  h3.sub {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .measure { max-width: 62ch; }
+
+  .label {
+    font-family: var(--grotesk);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .label.neutral { color: var(--muted); }
+
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--wash);
+    padding: 20px 24px;
+    border-radius: 0 10px 10px 0;
+    max-width: 640px;
+  }
+  .callout .label { margin-bottom: 6px; }
+  .callout p { font-size: 0.98rem; }
+
+  .cols-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+  }
+  .col-block { border-top: 2px solid var(--ink); padding-top: 14px; }
+
+  ul.tight { list-style: none; }
+  ul.tight li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+  ul.tight li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.72em;
+    width: 9px; height: 2px;
+    background: var(--accent);
+  }
+
+  /* ---------- options ---------- */
+  .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 2.5vw, 22px); }
+  .option {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 22px 24px;
+    background: #fff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .option:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(22, 19, 15, 0.07); }
+  .option.chosen { border: 2px solid var(--accent); background: #FDF6F4; }
+  .option .status {
+    font-family: var(--grotesk);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 10px;
+  }
+  .option.chosen .status { color: var(--accent); }
+  .option h4 {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .option p { font-size: 0.88rem; color: var(--muted); }
+  .option ul.tight li { font-size: 0.86rem; margin-bottom: 6px; }
+
+  /* ---------- signature: in-game event panel ---------- */
+  .event-panel {
+    background: var(--crimson);
+    background: radial-gradient(120% 140% at 85% 0%, #A02A4D 0%, var(--crimson) 45%, var(--crimson-deep) 100%);
+    border-radius: 18px;
+    padding: clamp(22px, 4vw, 40px);
+    margin: clamp(20px, 3vw, 32px) 0 12px;
+  }
+  .event-panel .panel-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    margin-bottom: clamp(18px, 3vw, 28px);
+  }
+  .event-panel .panel-title {
+    font-family: var(--grotesk);
+    font-weight: 600;
+    color: #fff;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    letter-spacing: 0.01em;
+  }
+  .event-panel .panel-timer {
+    font-family: var(--grotesk);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #E8B9C6;
+    white-space: nowrap;
+  }
+  .event-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 2vw, 18px); }
+  .ecard {
+    background: linear-gradient(180deg, var(--leaf) 0%, var(--leaf-deep) 100%);
+    border-radius: 14px;
+    padding: 18px 14px 16px;
+    text-align: center;
+    color: #DCEBE2;
+    display: flex; flex-direction: column; gap: 10px; align-items: center;
+  }
+  .ecard .day {
+    font-family: var(--grotesk);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8FBCA5;
+  }
+  .ecard .what {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    font-size: 0.92rem;
+    color: #fff;
+    line-height: 1.35;
+  }
+  .ecard .pill {
+    margin-top: auto;
+    font-family: var(--grotesk);
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    background: var(--sun);
+    color: #4A3405;
+    border-radius: 99px;
+    padding: 4px 14px;
+  }
+  .ecard.final {
+    background: linear-gradient(180deg, #F7C246 0%, var(--sun) 100%);
+    color: #4A3405;
+  }
+  .ecard.final .day { color: #8A6410; }
+  .ecard.final .what { color: #3C2A03; }
+  .ecard.final .pill { background: #3C2A03; color: var(--sun); }
+  .panel-note {
+    font-size: 0.85rem;
+    color: var(--faint);
+    margin-bottom: clamp(28px, 4vw, 40px);
+  }
+  .mech-points { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 40px; max-width: 640px; }
+
+  /* ---------- stats ---------- */
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 36px); }
+  .stat { border-top: 2px solid var(--ink); padding-top: 16px; }
+  .stat .n {
+    font-family: var(--grotesk);
+    font-weight: 500;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .stat .n.accent { color: var(--accent); }
+  .stat .d { font-size: 0.9rem; color: var(--muted); }
+
+  /* ---------- tables ---------- */
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  th {
+    font-family: var(--grotesk);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0 16px 10px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+  th.r, td.r { text-align: right; padding-right: 0; padding-left: 16px; }
+  td {
+    font-size: 0.95rem;
+    padding: 14px 16px 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  td.r { font-family: var(--grotesk); font-weight: 500; color: var(--ink); white-space: nowrap; }
+  tr.hl td { background: #FBF1EF; }
+  tr.hl td:first-child { font-weight: 600; color: var(--ink); border-radius: 8px 0 0 8px; padding-left: 12px; }
+  tr.hl td:last-child { border-radius: 0 8px 8px 0; padding-right: 12px; }
+  tr.hl td.r { color: var(--accent); }
+  .tbl-note { font-size: 0.85rem; color: var(--faint); margin-top: 14px; max-width: 72ch; }
+  .tbl-note b { color: var(--muted); font-weight: 600; }
+
+  /* ---------- placeholder slot ---------- */
+  .img-slot {
+    border: 1.5px dashed #C6BFB4;
+    background: var(--wash);
+    border-radius: 10px;
+    min-height: 220px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; text-align: center; padding: 32px;
+  }
+  .img-slot .slot-title {
+    font-family: var(--grotesk);
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .img-slot .slot-hint { font-size: 0.85rem; color: var(--faint); max-width: 40ch; }
+
+  /* ---------- learnings ---------- */
+  .num-list { list-style: none; counter-reset: n; max-width: 640px; }
+  .num-list li {
+    counter-increment: n;
+    display: flex; gap: 18px; align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .num-list li::before {
+    content: "0" counter(n);
+    font-family: var(--grotesk);
+    font-weight: 500;
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+  .takeaway {
+    background: var(--ink);
+    color: #EDEAE4;
+    border-radius: 14px;
+    padding: clamp(24px, 4vw, 36px);
+    max-width: 640px;
+  }
+  .takeaway .label { color: #C99B95; }
+  .takeaway p { font-size: 1.05rem; }
+
+  .quote {
+    font-family: var(--grotesk);
+    font-weight: 400;
+    font-size: clamp(1.3rem, 2.8vw, 1.9rem);
+    line-height: 1.45;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    max-width: 30ch;
+  }
+  .quote em { font-style: normal; color: var(--accent); }
+
+  /* ---------- footer ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 36px 0 48px;
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  }
+  footer .eyebrow { font-size: 0.68rem; }
+  footer a { color: var(--accent); text-decoration: none; font-family: var(--grotesk); font-size: 0.9rem; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ---------- spacing helpers ---------- */
+  .mb-s { margin-bottom: 20px; }
+  .mb-m { margin-bottom: clamp(28px, 4vw, 44px); }
+  .mb-l { margin-bottom: clamp(40px, 6vw, 64px); }
+
+  /* ---------- reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .option { transition: none; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 860px) {
+    .cols-3, .options { grid-template-columns: 1fr; }
+    .options { max-width: 480px; }
+    .event-cards { grid-template-columns: 1fr 1fr; }
+    .stat-row { grid-template-columns: 1fr; max-width: 420px; }
+    .meta-grid { grid-template-columns: 1fr 1fr; }
+    .section-head .tag { display: none; }
+  }
+  @media (max-width: 560px) {
+    .fig-grid { grid-template-columns: 1fr; }
+    .mech-points { grid-template-columns: 1fr; }
+    .nav .brand span.long { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">Parke Azadi <span class="dot">·</span> <span class="long">Yalda Event</span></a>
+    <div class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#constraints">Constraints</a>
+      <a href="#design">Design</a>
+      <a href="#collaboration">Collaboration</a>
+      <a href="#outcomes">Outcomes</a>
+      <a href="#learnings">Learnings</a>
+    </div>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</nav>
+
+<main id="top">
+  <!-- ============ HERO ============ -->
+  <header class="hero wrap">
+    <p class="eyebrow reveal">Product Design Case Study <span class="dot">·</span> Winter 2025</p>
+    <h1 class="reveal">Improving retention through a time&#8209;based <em>collection event</em></h1>
+    <p class="intro reveal">Parke Azadi is a social multiplayer game built for group play and shared experiences. It targets a young audience (~13–19) and runs as a live product, where engagement, retention, and monetization are tightly connected.</p>
+
+    <div class="meta-grid reveal">
+      <div><div class="k">Platform</div><div class="v">Android · Unity</div></div>
+      <div><div class="k">Role</div><div class="v">Product Designer</div></div>
+      <div><div class="k">Timeline</div><div class="v">Winter 2025</div></div>
+      <div><div class="k">Headline result</div><div class="v accent">+7.15pp D7 retention</div></div>
+    </div>
+
+    <figure class="fig reveal">
+      <img src="HeroImage.jpg" alt="Parke Azadi world during the winter event — players gathered around the central plaza" fetchpriority="high">
+      <figcaption><b>In game</b> The shared world during the winter season — players gathered around the central plaza.</figcaption>
+    </figure>
+  </header>
+
+  <!-- ============ 01 PROBLEM ============ -->
+  <section id="problem" class="wrap">
+    <div class="section-head reveal">
+      <span class="num">01</span><h2>The Problem</h2><span class="tag">Context</span>
+    </div>
+    <h3 class="sub reveal">High engagement, low retention</h3>
+    <p class="measure mb-s reveal">Players enjoyed each session but lacked motivation to return consistently and stay invested over time — a missing system for repeated play and long-term commitment, especially for a young audience.</p>
+    <div class="callout reveal">
+      <div class="label">Hypothesis</div>
+      <p>Improving retention would support the business, since retained players consistently showed higher engagement over time.</p>
+    </div>
+  </section>
+
+  <!-- ============ 02 CONSTRAINTS ============ -->
+  <section id="constraints" class="wrap">
+    <div class="section-head reveal">
+      <span class="num">02</span><h2>Constraints &amp; Insights</h2><span class="tag">Forces</span>
+    </div>
+    <p class="measure mb-m reveal">Three forces shaped every decision — what the tech could support, what the data already showed, and how much time we had.</p>
+    <div class="cols-3 mb-m reveal">
+      <div class="col-block">
+        <div class="label neutral">Technical</div>
+        <ul class="tight">
+          <li>Live multiplayer game with a growing player base, on not-yet-scaled infrastructure</li>
+          <li>Some behavioral fixes needed backend migration, limiting rapid change</li>
+          <li>Unity called for lightweight, low-dependency solutions</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <div class="label neutral">Insights</div>
+        <ul class="tight">
+          <li>Analytics revealing retention drop-offs and usage patterns</li>
+          <li>User research into what motivates a younger audience</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <div class="label neutral">Business</div>
+        <ul class="tight">
+          <li>Pressure to improve retention within a short timeframe</li>
+          <li>Little room for long dev cycles or large experiments</li>
+          <li>A focus on fast iteration and practical impact</li>
+        </ul>
+      </div>
+    </div>
+    <div class="img-slot reveal">
+      <div class="slot-title">Retention data</div>
+      <div class="slot-hint">Analytics chart — retention drop-off curve or usage pattern before the event</div>
+    </div>
+  </section>
+
+  <!-- ============ 03 DESIGN ============ -->
+  <section id="design" class="wrap">
+    <div class="section-head reveal">
+      <span class="num">03</span><h2>Design Decisions &amp; Experiments</h2><span class="tag">The Yalda Event</span>
+    </div>
+
+    <div class="callout mb-m reveal">
+      <div class="label">Hypothesis</div>
+      <p>Requiring players to return on consecutive days to unlock a meaningful reward would lift short-term retention.</p>
+    </div>
+
+    <div class="label neutral reveal">Options considered</div>
+    <div class="options mb-l reveal">
+      <div class="option">
+        <div class="status">Already live</div>
+        <h4>Daily login rewards</h4>
+        <p>Already in the game; on its own, not enough to move retention.</p>
+      </div>
+      <div class="option">
+        <div class="status">Not feasible</div>
+        <h4>New mini-game</h4>
+        <p>Frequently requested, but constraints and timeline made a polished launch unrealistic.</p>
+      </div>
+      <div class="option chosen">
+        <div class="status">✓ Chosen</div>
+        <h4>Shard collection event</h4>
+        <ul class="tight">
+          <li>Daily return visits via progressive rewards</li>
+          <li>More exploration across the world</li>
+          <li>A light challenge, low dev lift</li>
+          <li>Reusable as future LiveOps</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="sub reveal">The mechanic</h3>
+    <p class="measure reveal">Visit daily, collect shards across days, and unlock a final high-value reward. Missing a day risks the reward — a gentle loss-aversion pull. No purchase required, keeping it right for a younger audience.</p>
+
+    <div class="event-panel reveal" role="img" aria-label="The event structure: collect shards on three consecutive days to unlock the final reward">
+      <div class="panel-head">
+        <div class="panel-title">Yalda Hunt — the event structure</div>
+        <div class="panel-timer">7 days to finish</div>
+      </div>
+      <div class="event-cards">
+        <div class="ecard"><div class="day">Day 1</div><div class="what">Collect the day's shards</div><div class="pill">2/2</div></div>
+        <div class="ecard"><div class="day">Day 2</div><div class="what">Collect the day's shards</div><div class="pill">3/3</div></div>
+        <div class="ecard"><div class="day">Day 3</div><div class="what">Collect the day's shards</div><div class="pill">4/4</div></div>
+        <div class="ecard final"><div class="day">Unlock</div><div class="what">Final high-value reward</div><div class="pill">Claim</div></div>
+      </div>
+    </div>
+    <p class="panel-note reveal">Structure shown in the visual language of the shipped event panel.</p>
+
+    <div class="mech-points mb-l reveal">
+      <ul class="tight">
+        <li>Strong sense of progression</li>
+        <li>Clear communication of the concept</li>
+      </ul>
+      <ul class="tight">
+        <li>Loss aversion as a return driver</li>
+        <li>No purchase requirement</li>
+      </ul>
+    </div>
+
+    <figure class="fig reveal">
+      <img src="EventInGamePlay.jpg" alt="Collecting a shard in the world — a player holds to open a chest" loading="lazy">
+      <figcaption><b>The mechanic in play</b> Shard collection in the world — players explore the park and hold to open each day's chest.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 04 COLLABORATION ============ -->
+  <section id="collaboration" class="wrap">
+    <div class="section-head reveal">
+      <span class="num">04</span><h2>Collaboration</h2><span class="tag">Process</span>
+    </div>
+    <h3 class="sub reveal">Aligning early, before code</h3>
+    <p class="measure mb-m reveal">Early sketches and wireframes aligned the team, surfaced technical constraints, and simplified implementation before development began.</p>
+
+    <div class="cols-3 mb-l reveal">
+      <div class="col-block">
+        <div class="label neutral">PM &amp; Engineering</div>
+        <ul class="tight">
+          <li>Partnered closely with PM and developers throughout</li>
+          <li>Shared early sketches to align and surface constraints</li>
+          <li>Resolved open questions early to simplify build</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <div class="label neutral">Prioritization</div>
+        <ul class="tight">
+          <li>Fixed critical issues before release</li>
+          <li>Caught usability problems via internal testing</li>
+          <li>Planned post-launch refinement on real feedback</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <div class="label neutral">Efficiency</div>
+        <ul class="tight">
+          <li>Reused existing assets wherever possible to cut dev effort and speed delivery</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="label neutral reveal">From sketch to shipped UI</div>
+    <div class="fig-grid mb-s reveal">
+      <figure class="fig">
+        <img src="Skech-1.jpg" alt="Early pencil sketches exploring the event panel and in-world placement" loading="lazy">
+        <figcaption><b>01 Sketch</b> Early exploration — event panel, in-world placement, and notification states.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="Skech-2.jpg" alt="Refined pencil sketch of the event panel" loading="lazy">
+        <figcaption><b>02 Sketch</b> Refining the event panel — day progression, timers, and reward states.</figcaption>
+      </figure>
+    </div>
+    <div class="fig-grid mb-l reveal">
+      <figure class="fig">
+        <img src="Wireframe.jpg" alt="Low-fidelity wireframe of the event screen" loading="lazy">
+        <figcaption><b>03 Wireframe</b> Low-fi structure — item cards, day tracker, and guidance copy.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="EventUI.jpg" alt="Final event screen on day three with claimed, active, and locked rewards" loading="lazy">
+        <figcaption><b>04 Final UI</b> Shipped event screen — claimed, active, and locked rewards on Day 3.</figcaption>
+      </figure>
+    </div>
+
+    <div class="callout reveal">
+      <div class="label">Trade-offs</div>
+      <p>Under time pressure, usability testing was limited to internal participants unfamiliar with the feature. We shipped with known UX risk and closely watched support tickets and behavioral data post-release. That feedback became next-sprint tasks — though the event hasn't been re-run, so those improvements aren't yet re-measured.</p>
+    </div>
+  </section>
+
+  <!-- ============ 05 OUTCOMES ============ -->
+  <section id="outcomes" class="wrap">
+    <div class="section-head reveal">
+      <span class="num">05</span><h2>Outcomes</h2><span class="tag">Impact</span>
+    </div>
+
+    <div class="stat-row mb-l reveal">
+      <div class="stat">
+        <div class="n accent">+7.15pp</div>
+        <div class="d">D7 retention lift vs. the 10 days before the event — the cleanest baseline. D1 rose +4.8pp on the same comparison.</div>
+      </div>
+      <div class="stat">
+        <div class="n">0.37</div>
+        <div class="d">Stickiness (WAU/DAU), up from 0.30 pre-event — users returned more often within the week, not just once.</div>
+      </div>
+      <div class="stat">
+        <div class="n">669</div>
+        <div class="d">Users completed all three tasks and claimed the final reward.</div>
+      </div>
+    </div>
+
+    <div class="label neutral reveal">Retention lift across three baselines</div>
+    <div class="table-scroll reveal">
+      <table>
+        <tr><th>Baseline</th><th class="r">D1 lift</th><th class="r">D7 lift</th></tr>
+        <tr><td>Summer peak — strongest natural season</td><td class="r">+1.3pp</td><td class="r">+1.53pp</td></tr>
+        <tr><td>School-start dip</td><td class="r">+3.4pp</td><td class="r">+1.88pp</td></tr>
+        <tr class="hl"><td>10 days pre-event — cleanest baseline</td><td class="r">+4.8pp</td><td class="r">+7.15pp</td></tr>
+      </table>
+    </div>
+    <p class="tbl-note mb-l reveal"><b>Why three baselines:</b> one before/after comparison can mislead, so lift was checked against summer (the strongest natural season), the school-start dip, and the 10 days pre-event. Lift held even against summer — suggesting the effect wasn't merely seasonal.</p>
+
+    <div class="label neutral reveal">Task funnel</div>
+    <div class="table-scroll reveal">
+      <table>
+        <tr><th>Task</th><th class="r">Active</th><th class="r">Started</th><th class="r">Completed of started</th></tr>
+        <tr><td>1 — Pet</td><td class="r">10,347</td><td class="r">45.2%</td><td class="r">39.7%</td></tr>
+        <tr><td>2 — Temporary duo emote</td><td class="r">11,354</td><td class="r">47.2%</td><td class="r">28.4%</td></tr>
+        <tr><td>3 — Yaldak character</td><td class="r">14,286</td><td class="r">47.2%</td><td class="r">19.3%</td></tr>
+      </table>
+    </div>
+    <p class="tbl-note mb-l reveal">About half of active users entered the first task — a healthy entry rate. The gradual drop-off across more demanding tasks is expected, with no unusual friction.</p>
+
+    <div class="callout reveal">
+      <div class="label">Game health</div>
+      <p>The event gave away four free cosmetic items, so revenue was watched as a guardrail. It held steady with no meaningful dip — the LiveOps ran without harming the game's economy. A health check, not a monetization result: it wasn't measured for revenue growth, only the absence of harm.</p>
+    </div>
+  </section>
+
+  <!-- ============ 06 LEARNINGS ============ -->
+  <section id="learnings" class="wrap">
+    <div class="section-head reveal">
+      <span class="num">06</span><h2>Learnings</h2><span class="tag">Reflection</span>
+    </div>
+
+    <figure class="fig mb-l reveal">
+      <img src="FinalReward.jpg" alt="The final day of the event — all rewards claimed and the final prize unlocked" loading="lazy">
+      <figcaption><b>Final day</b> All three tasks complete — the reward set claimed and the final prize unlocked.</figcaption>
+    </figure>
+
+    <div class="label neutral reveal">What I'd do differently</div>
+    <ul class="num-list mb-l reveal">
+      <li>Design features with clear measurement hooks from the start</li>
+      <li>Ensure post-release follow-ups, even with limited tooling</li>
+    </ul>
+
+    <div class="takeaway mb-l reveal">
+      <div class="label">Key takeaway</div>
+      <p>Imperfect data is unavoidable — but naming the measurement gaps early leads to stronger product decisions.</p>
+    </div>
+
+    <p class="quote reveal">Product design isn't only about designing features — it's about <em>validating hypotheses</em>. Some experiments delivered measurable results; others revealed gaps in our process rather than problems with the ideas.</p>
+  </section>
+
+  <footer class="wrap">
+    <span class="eyebrow">Parke Azadi <span class="dot">·</span> Yalda Event Case Study</span>
+    <a href="mailto:abbaspourmatin1@gmail.com">abbaspourmatin1@gmail.com</a>
+  </footer>
+</main>
+
+<script>
+  // Scroll reveal
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(el => io.observe(el));
+  }
+
+  // Reading progress bar
+  const bar = document.querySelector('.progress');
+  const onScroll = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+
+</body>
+</html>
