@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parke Azadi — Improving Retention Through a Time-Based Collection Event</title>
-<meta name="description" content="Product design case study — a Yalda collection event that lifted D7 retention by 7.15pp in a social multiplayer game.">
+<title>Parke Azadi Case Study — Matin Abbaspour</title>
+<meta name="description" content="Product design case study by Matin Abbaspour — a Yalda collection event that lifted D7 retention by 5.37pp to 39.87% in a social multiplayer game.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
@@ -505,7 +505,7 @@
 <main id="top">
   <!-- ============ HERO ============ -->
   <header class="hero wrap">
-    <p class="eyebrow reveal">Product Design Case Study <span class="dot">·</span> Winter 2025</p>
+    <p class="eyebrow reveal">Matin Abbaspour <span class="dot">·</span> Product Design Case Study <span class="dot">·</span> Winter 2025</p>
     <h1 class="reveal">Improving retention through a time&#8209;based <em>collection event</em></h1>
     <p class="intro reveal">Parke Azadi is a social multiplayer game built for group play and shared experiences. It targets a young audience (~13–19) and runs as a live product, where engagement, retention, and monetization are tightly connected.</p>
 
@@ -513,11 +513,11 @@
       <div><div class="k">Platform</div><div class="v">Android · Unity</div></div>
       <div><div class="k">Role</div><div class="v">Product Designer</div></div>
       <div><div class="k">Timeline</div><div class="v">Winter 2025</div></div>
-      <div><div class="k">Headline result</div><div class="v accent">+7.15pp D7 retention</div></div>
+      <div><div class="k">Headline result</div><div class="v accent">+5.37pp D7 retention</div></div>
     </div>
 
     <figure class="fig reveal">
-      <img src="HeroImage.jpg" alt="Parke Azadi world during the winter event — players gathered around the central plaza" fetchpriority="high">
+      <img src="Hero image.jpg" alt="Parke Azadi world during the winter event — players gathered around the central plaza" fetchpriority="high">
       <figcaption><b>In game</b> The shared world during the winter season — players gathered around the central plaza.</figcaption>
     </figure>
   </header>
@@ -566,9 +566,21 @@
         </ul>
       </div>
     </div>
-    <div class="img-slot reveal">
-      <div class="slot-title">Retention data</div>
-      <div class="slot-hint">Analytics chart — retention drop-off curve or usage pattern before the event</div>
+
+    <div class="label neutral reveal">The problem in numbers — 10 days before the event</div>
+    <div class="stat-row reveal">
+      <div class="stat">
+        <div class="n">50.18%</div>
+        <div class="d">D1 retention — only half of new players came back the day after their first session. D3 sat at 39.43%.</div>
+      </div>
+      <div class="stat">
+        <div class="n accent">34.50%</div>
+        <div class="d">D7 retention — roughly two of three players were gone within a week.</div>
+      </div>
+      <div class="stat">
+        <div class="n">0.30</div>
+        <div class="d">Stickiness (DAU/WAU) — the share of weekly players who returned on a given day.</div>
+      </div>
     </div>
   </section>
 
@@ -580,7 +592,7 @@
 
     <div class="callout mb-m reveal">
       <div class="label">Hypothesis</div>
-      <p>Requiring players to return on consecutive days to unlock a meaningful reward would lift short-term retention.</p>
+      <p>Bringing players back across multiple days to collect shards toward a meaningful reward would lift short-term retention.</p>
     </div>
 
     <div class="label neutral reveal">Options considered</div>
@@ -608,18 +620,18 @@
     </div>
 
     <h3 class="sub reveal">The mechanic</h3>
-    <p class="measure reveal">Visit daily, collect shards across days, and unlock a final high-value reward. Missing a day risks the reward — a gentle loss-aversion pull. No purchase required, keeping it right for a younger audience.</p>
+    <p class="measure reveal">A 10-day event: players explore the park collecting shards — 2 unlock the first prize, 3 the second, 4 the third. Collecting them all wins the final high-value reward. The fixed window creates a gentle loss-aversion pull, and no purchase is required, keeping it right for a younger audience.</p>
 
-    <div class="event-panel reveal" role="img" aria-label="The event structure: collect shards on three consecutive days to unlock the final reward">
+    <div class="event-panel reveal" role="img" aria-label="The event structure: collect 2, 3, then 4 shards to unlock three prizes; collecting them all wins the final prize">
       <div class="panel-head">
         <div class="panel-title">Yalda Hunt — the event structure</div>
-        <div class="panel-timer">7 days to finish</div>
+        <div class="panel-timer">10-day event</div>
       </div>
       <div class="event-cards">
-        <div class="ecard"><div class="day">Day 1</div><div class="what">Collect the day's shards</div><div class="pill">2/2</div></div>
-        <div class="ecard"><div class="day">Day 2</div><div class="what">Collect the day's shards</div><div class="pill">3/3</div></div>
-        <div class="ecard"><div class="day">Day 3</div><div class="what">Collect the day's shards</div><div class="pill">4/4</div></div>
-        <div class="ecard final"><div class="day">Unlock</div><div class="what">Final high-value reward</div><div class="pill">Claim</div></div>
+        <div class="ecard"><div class="day">Prize 1</div><div class="what">Collect 2 shards</div><div class="pill">2/2</div></div>
+        <div class="ecard"><div class="day">Prize 2</div><div class="what">Collect 3 shards</div><div class="pill">3/3</div></div>
+        <div class="ecard"><div class="day">Prize 3</div><div class="what">Collect 4 shards</div><div class="pill">4/4</div></div>
+        <div class="ecard final"><div class="day">All collected</div><div class="what">Final high-value prize</div><div class="pill">Claim</div></div>
       </div>
     </div>
     <p class="panel-note reveal">Structure shown in the visual language of the shipped event panel.</p>
@@ -636,8 +648,8 @@
     </div>
 
     <figure class="fig reveal">
-      <img src="EventInGamePlay.jpg" alt="Collecting a shard in the world — a player holds to open a chest" loading="lazy">
-      <figcaption><b>The mechanic in play</b> Shard collection in the world — players explore the park and hold to open each day's chest.</figcaption>
+      <img src="Event In GamePlay.jpg" alt="Collecting a shard in the world — a player holds to open a chest" loading="lazy">
+      <figcaption><b>The mechanic in play</b> Shard collection in the world — players explore the park and hold to open chests.</figcaption>
     </figure>
   </section>
 
@@ -691,7 +703,7 @@
         <figcaption><b>03 Wireframe</b> Low-fi structure — item cards, day tracker, and guidance copy.</figcaption>
       </figure>
       <figure class="fig">
-        <img src="EventUI.jpg" alt="Final event screen on day three with claimed, active, and locked rewards" loading="lazy">
+        <img src="Event UI.jpg" alt="Final event screen on day three with claimed, active, and locked rewards" loading="lazy">
         <figcaption><b>04 Final UI</b> Shipped event screen — claimed, active, and locked rewards on Day 3.</figcaption>
       </figure>
     </div>
@@ -710,12 +722,12 @@
 
     <div class="stat-row mb-l reveal">
       <div class="stat">
-        <div class="n accent">+7.15pp</div>
-        <div class="d">D7 retention lift vs. the 10 days before the event — the cleanest baseline. D1 rose +4.8pp on the same comparison.</div>
+        <div class="n accent">+5.37pp</div>
+        <div class="d">D7 retention lift — from 34.50% to 39.87% vs. the 10 days pre-event. D1 rose +7.96pp and D3 +9.58pp on the same comparison.</div>
       </div>
       <div class="stat">
         <div class="n">0.37</div>
-        <div class="d">Stickiness (WAU/DAU), up from 0.30 pre-event — users returned more often within the week, not just once.</div>
+        <div class="d">Stickiness (DAU/WAU), up from 0.30 pre-event — users returned more often within the week, not just once.</div>
       </div>
       <div class="stat">
         <div class="n">669</div>
@@ -729,7 +741,7 @@
         <tr><th>Baseline</th><th class="r">D1 lift</th><th class="r">D7 lift</th></tr>
         <tr><td>Summer peak — strongest natural season</td><td class="r">+1.3pp</td><td class="r">+1.53pp</td></tr>
         <tr><td>School-start dip</td><td class="r">+3.4pp</td><td class="r">+1.88pp</td></tr>
-        <tr class="hl"><td>10 days pre-event — cleanest baseline</td><td class="r">+4.8pp</td><td class="r">+7.15pp</td></tr>
+        <tr class="hl"><td>10 days pre-event — cleanest baseline</td><td class="r">+7.96pp</td><td class="r">+5.37pp</td></tr>
       </table>
     </div>
     <p class="tbl-note mb-l reveal"><b>Why three baselines:</b> one before/after comparison can mislead, so lift was checked against summer (the strongest natural season), the school-start dip, and the 10 days pre-event. Lift held even against summer — suggesting the effect wasn't merely seasonal.</p>
@@ -758,7 +770,7 @@
     </div>
 
     <figure class="fig mb-l reveal">
-      <img src="FinalReward.jpg" alt="The final day of the event — all rewards claimed and the final prize unlocked" loading="lazy">
+      <img src="Final Reward.jpg" alt="The final day of the event — all rewards claimed and the final prize unlocked" loading="lazy">
       <figcaption><b>Final day</b> All three tasks complete — the reward set claimed and the final prize unlocked.</figcaption>
     </figure>
 
@@ -777,8 +789,8 @@
   </section>
 
   <footer class="wrap">
-    <span class="eyebrow">Parke Azadi <span class="dot">·</span> Yalda Event Case Study</span>
-    <a href="mailto:abbaspourmatin1@gmail.com">abbaspourmatin1@gmail.com</a>
+    <span class="eyebrow">Matin Abbaspour <span class="dot">·</span> Parke Azadi — Yalda Event Case Study</span>
+    <a href="mailto:matinabbaspour@gmail.com">matinabbaspour@gmail.com</a>
   </footer>
 </main>
 
